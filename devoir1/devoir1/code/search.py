@@ -97,24 +97,22 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     startState = problem.getStartState()
-    L = util.Stack()
-    L.push(startState)
+    stateStack = util.Stack()
+    stateStack.push((startState,[]))
     visitedStates = set()
-    while L.isEmpty() == False:
-        state = L.pop()
-        #print(state)         
-        if problem.isGoalState(state):
-            return L
+    while stateStack.isEmpty() == False:
+        state = stateStack.pop()
+        if problem.isGoalState(state[0]):
+            print("FOUND IT : ",state)
+            return state[1]  
         else:
-            sucessorsTuple = problem.getSuccessors(state)                
-            #print(visitedStates)         
-            for sucessor in sucessorsTuple:
-                if sucessor not in visitedStates:
-                    print(visitedStates) 
-                    print(sucessor[0]) 
-                    L.push(sucessor[0])
-
-            visitedStates.add(state)
+            sucessorsTuple = problem.getSuccessors(state[0])                          
+            for sucessor in sucessorsTuple:      
+                if sucessor[0] not in visitedStates:
+                    path = list(state[1])
+                    path.append(sucessor[1])
+                    stateStack.push((sucessor[0],path))
+            visitedStates.add(state[0])
     util.raiseNotDefined()
 
 
