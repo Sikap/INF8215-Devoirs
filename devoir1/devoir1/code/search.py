@@ -93,9 +93,7 @@ def depthFirstSearch(problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
-    #print("Start:", problem.getStartState())
-    #print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
     startState = problem.getStartState()
     stateStack = util.Stack()
     stateStack.push((startState,[]))
@@ -130,7 +128,6 @@ def breadthFirstSearch(problem):
     visitedStates = set()
     while not stateQueue.isEmpty():
         state = stateQueue.pop()
-        #print("STATE : ",state)
         if problem.isGoalState(state[0]):
             #print("FOUND IT : ",state)
             return state[1]  
@@ -150,9 +147,7 @@ def uniformCostSearch(problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 3 ICI
     '''
-    #print("Start:", problem.getStartState())
-    #print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
     startState = problem.getStartState()
     statesPriorityQueue = util.PriorityQueue()
     statesPriorityQueue.push((startState,[],0),0)
@@ -165,16 +160,12 @@ def uniformCostSearch(problem):
             return state[1]
         else:            
             if state[0] not in visitedStates: 
-                #print("STATE : ",state)  
                 sucessorsTuple = problem.getSuccessors(state[0]) 
-                #print("SUCESSORS STATES : ",sucessorsTuple)     
                 for sucessor in sucessorsTuple:
-                    #print("sucessor", sucessor)
-                    #print("sucessor[0]", sucessor[0])
                     if sucessor[0] not in visitedStates:
                         path = list(state[1])
                         path.append(sucessor[1])
-                        cost = int(state[2] + sucessor[2])
+                        cost = float(state[2] + sucessor[2])
                         statesPriorityQueue.update((sucessor[0],path,cost),cost)
                 visitedStates.add(state[0])
     util.raiseNotDefined()
