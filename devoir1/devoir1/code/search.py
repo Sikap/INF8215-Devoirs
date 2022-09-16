@@ -182,7 +182,28 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 4 ICI
     '''
+    startState = problem.getStartState()
+    statesPriorityQueue = util.PriorityQueue()
+    initalCost = float(heuristic(startState,problem))
+    statesPriorityQueue.push((startState,[],0),initalCost)
+    visitedStates = set()
 
+    while statesPriorityQueue.isEmpty() == False:
+        state = statesPriorityQueue.pop()            
+        if state[0] not in visitedStates: 
+            if problem.isGoalState(state[0]):
+                #print("FOUND IT : ",state)
+                return state[1]
+            else:   
+                visitedStates.add(state[0])
+                sucessorsTuple = problem.getSuccessors(state[0]) 
+                for sucessor in sucessorsTuple:
+                    if sucessor[0] not in visitedStates:
+                        path = list(state[1])
+                        path.append(sucessor[1])
+                        cost = float(state[2] + sucessor[2])
+                        priority = float(state[2]+sucessor[2]+heuristic(sucessor[0],problem))
+                        statesPriorityQueue.update((sucessor[0],path,cost),priority)
     util.raiseNotDefined()
 
 
