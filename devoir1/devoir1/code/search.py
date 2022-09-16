@@ -93,47 +93,90 @@ def depthFirstSearch(problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    #print("Start:", problem.getStartState())
+    #print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     startState = problem.getStartState()
     stateStack = util.Stack()
     stateStack.push((startState,[]))
     visitedStates = set()
-    while stateStack.isEmpty() == False:
+    while not stateStack.isEmpty():
         state = stateStack.pop()
         if problem.isGoalState(state[0]):
-            print("FOUND IT : ",state)
+            #print("FOUND IT : ",state)
             return state[1]  
         else:
-            sucessorsTuple = problem.getSuccessors(state[0])                          
-            for sucessor in sucessorsTuple:      
-                if sucessor[0] not in visitedStates:
-                    path = list(state[1])
-                    path.append(sucessor[1])
-                    stateStack.push((sucessor[0],path))
-            visitedStates.add(state[0])
+            if state[0] not in visitedStates:
+                sucessorsTuple = problem.getSuccessors(state[0])                          
+                for sucessor in sucessorsTuple:      
+                    if sucessor[0] not in visitedStates:
+                        path = list(state[1])
+                        path.append(sucessor[1])
+                        stateStack.push((sucessor[0],path))
+                visitedStates.add(state[0])
     util.raiseNotDefined()
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-
+    
 
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 2 ICI
     '''
-
+    startState = problem.getStartState()
+    stateQueue = util.Queue()
+    stateQueue.push((startState,[]))
+    visitedStates = set()
+    while not stateQueue.isEmpty():
+        state = stateQueue.pop()
+        #print("STATE : ",state)
+        if problem.isGoalState(state[0]):
+            #print("FOUND IT : ",state)
+            return state[1]  
+        else:
+            if state[0] not in visitedStates:
+                sucessorsTuple = problem.getSuccessors(state[0])                          
+                for sucessor in sucessorsTuple:      
+                    if sucessor[0] not in visitedStates:
+                        path = list(state[1])
+                        path.append(sucessor[1])
+                        stateQueue.push((sucessor[0],path))
+                visitedStates.add(state[0])
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-
-
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 3 ICI
     '''
+    #print("Start:", problem.getStartState())
+    #print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    startState = problem.getStartState()
+    statesPriorityQueue = util.PriorityQueue()
+    statesPriorityQueue.push((startState,[],0),0)
+    visitedStates = set()
 
+    while statesPriorityQueue.isEmpty() == False:
+        state = statesPriorityQueue.pop()
+        if problem.isGoalState(state[0]):
+            #print("FOUND IT : ",state)
+            return state[1]
+        else:            
+            if state[0] not in visitedStates: 
+                #print("STATE : ",state)  
+                sucessorsTuple = problem.getSuccessors(state[0]) 
+                #print("SUCESSORS STATES : ",sucessorsTuple)     
+                for sucessor in sucessorsTuple:
+                    #print("sucessor", sucessor)
+                    #print("sucessor[0]", sucessor[0])
+                    if sucessor[0] not in visitedStates:
+                        path = list(state[1])
+                        path.append(sucessor[1])
+                        cost = int(state[2] + sucessor[2])
+                        statesPriorityQueue.update((sucessor[0],path,cost),cost)
+                visitedStates.add(state[0])
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
