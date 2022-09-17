@@ -37,6 +37,7 @@ description for details.
 Good luck and happy searching!
 """
 
+from itertools import count
 from game import Directions
 from game import Agent
 from game import Actions
@@ -294,7 +295,7 @@ class CornersProblem(search.SearchProblem):
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
-
+        self.startState = (self.startingPosition,[False,False,False,False])
 
     def getStartState(self):
         """
@@ -305,7 +306,7 @@ class CornersProblem(search.SearchProblem):
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
-        
+        return self.startState
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -316,7 +317,11 @@ class CornersProblem(search.SearchProblem):
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
-
+        for i, corner in enumerate(self.corners,start=0):
+            if state[0] == corner:
+                 state[1][i] = True
+        
+        return all(state[1])
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -342,7 +347,21 @@ class CornersProblem(search.SearchProblem):
             '''
                 INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
             '''
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx,nexty)
+                nextCorners = [False,False,False,False]
+                for i, corner in enumerate(self.corners,start=0):
+                    if nextState == corner:
+                        nextCorners[i] = True
+                    else :
+                        nextCorners[i] = state[1][i]
 
+                successors.append(((nextState,nextCorners),action,1))
+        
+        #print("successors: ",successors)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

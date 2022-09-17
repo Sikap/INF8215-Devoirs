@@ -97,21 +97,21 @@ def depthFirstSearch(problem):
     startState = problem.getStartState()
     stateStack = util.Stack()
     stateStack.push((startState,[]))
-    visitedStates = set()
+    visitedStates = []
     while not stateStack.isEmpty():
         state = stateStack.pop()
-        if problem.isGoalState(state[0]):
-            #print("FOUND IT : ",state)
-            return state[1]  
-        else:
-            if state[0] not in visitedStates:
+        if state[0] not in visitedStates:
+            if problem.isGoalState(state[0]):
+                #print("FOUND IT : ",state)
+                return state[1]  
+            else:
                 sucessorsTuple = problem.getSuccessors(state[0])                          
                 for sucessor in sucessorsTuple:      
                     if sucessor[0] not in visitedStates:
                         path = list(state[1])
                         path.append(sucessor[1])
                         stateStack.push((sucessor[0],path))
-                visitedStates.add(state[0])
+                visitedStates.append(state[0])
     util.raiseNotDefined()
 
 
@@ -125,21 +125,23 @@ def breadthFirstSearch(problem):
     startState = problem.getStartState()
     stateQueue = util.Queue()
     stateQueue.push((startState,[]))
-    visitedStates = set()
-    while not stateQueue.isEmpty():
+    visitedStates = []
+    while not stateQueue.isEmpty():                
         state = stateQueue.pop()
-        if problem.isGoalState(state[0]):
-            #print("FOUND IT : ",state)
-            return state[1]  
-        else:
-            if state[0] not in visitedStates:
-                sucessorsTuple = problem.getSuccessors(state[0])                          
+        if state[0] not in visitedStates:
+            print("SATE : ",state)
+            if problem.isGoalState(state[0]):
+                #print("FOUND IT : ",state)
+                return state[1]  
+            else: 
+                sucessorsTuple = problem.getSuccessors(state[0])  
+                #print("SUCCESSORS : ",sucessorsTuple)                        
                 for sucessor in sucessorsTuple:      
                     if sucessor[0] not in visitedStates:
                         path = list(state[1])
                         path.append(sucessor[1])
                         stateQueue.push((sucessor[0],path))
-                visitedStates.add(state[0])
+                visitedStates.append(state[0])
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
@@ -151,15 +153,15 @@ def uniformCostSearch(problem):
     startState = problem.getStartState()
     statesPriorityQueue = util.PriorityQueue()
     statesPriorityQueue.push((startState,[],0),0)
-    visitedStates = set()
+    visitedStates = []
 
     while statesPriorityQueue.isEmpty() == False:
-        state = statesPriorityQueue.pop()
-        if problem.isGoalState(state[0]):
-            #print("FOUND IT : ",state)
-            return state[1]
-        else:            
-            if state[0] not in visitedStates: 
+        state = statesPriorityQueue.pop() 
+        if state[0] not in visitedStates:
+            if problem.isGoalState(state[0]):
+                #print("FOUND IT : ",state)
+                return state[1]
+            else:            
                 sucessorsTuple = problem.getSuccessors(state[0]) 
                 for sucessor in sucessorsTuple:
                     if sucessor[0] not in visitedStates:
@@ -167,7 +169,7 @@ def uniformCostSearch(problem):
                         path.append(sucessor[1])
                         cost = float(state[2] + sucessor[2])
                         statesPriorityQueue.update((sucessor[0],path,cost),cost)
-                visitedStates.add(state[0])
+                visitedStates.append(state[0])
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -186,16 +188,15 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     statesPriorityQueue = util.PriorityQueue()
     initalCost = float(heuristic(startState,problem))
     statesPriorityQueue.push((startState,[],0),initalCost)
-    visitedStates = set()
+    visitedStates = []
 
     while statesPriorityQueue.isEmpty() == False:
-        state = statesPriorityQueue.pop()            
-        if state[0] not in visitedStates: 
+        state = statesPriorityQueue.pop() 
+        if state[0] not in visitedStates:           
             if problem.isGoalState(state[0]):
                 #print("FOUND IT : ",state)
                 return state[1]
-            else:   
-                visitedStates.add(state[0])
+            else: 
                 sucessorsTuple = problem.getSuccessors(state[0]) 
                 for sucessor in sucessorsTuple:
                     if sucessor[0] not in visitedStates:
@@ -203,7 +204,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                         path.append(sucessor[1])
                         cost = float(state[2] + sucessor[2])
                         priority = float(state[2]+sucessor[2]+heuristic(sucessor[0],problem))
-                        statesPriorityQueue.update((sucessor[0],path,cost),priority)
+                        statesPriorityQueue.update((sucessor[0],path,cost),priority)                
+                visitedStates.append(state[0])
+
     util.raiseNotDefined()
 
 
