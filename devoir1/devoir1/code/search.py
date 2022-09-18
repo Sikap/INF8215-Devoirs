@@ -102,7 +102,6 @@ def depthFirstSearch(problem):
         state = stateStack.pop()
         if state[0] not in visitedStates:
             if problem.isGoalState(state[0]):
-                #print("FOUND IT : ",state)
                 return state[1]  
             else:
                 sucessorsTuple = problem.getSuccessors(state[0])                          
@@ -129,13 +128,10 @@ def breadthFirstSearch(problem):
     while not stateQueue.isEmpty():                
         state = stateQueue.pop()
         if state[0] not in visitedStates:
-            print("SATE : ",state)
             if problem.isGoalState(state[0]):
-                #print("FOUND IT : ",state)
                 return state[1]  
             else: 
                 sucessorsTuple = problem.getSuccessors(state[0])  
-                #print("SUCCESSORS : ",sucessorsTuple)                        
                 for sucessor in sucessorsTuple:      
                     if sucessor[0] not in visitedStates:
                         path = list(state[1])
@@ -159,7 +155,6 @@ def uniformCostSearch(problem):
         state = statesPriorityQueue.pop() 
         if state[0] not in visitedStates:
             if problem.isGoalState(state[0]):
-                #print("FOUND IT : ",state)
                 return state[1]
             else:            
                 sucessorsTuple = problem.getSuccessors(state[0]) 
@@ -194,7 +189,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         state = statesPriorityQueue.pop() 
         if state[0] not in visitedStates:           
             if problem.isGoalState(state[0]):
-                #print("FOUND IT : ",state)
                 return state[1]
             else: 
                 sucessorsTuple = problem.getSuccessors(state[0]) 

@@ -361,7 +361,6 @@ class CornersProblem(search.SearchProblem):
 
                 successors.append(((nextState,nextCorners),action,1))
         
-        #print("successors: ",successors)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -397,21 +396,14 @@ def cornersHeuristic(state, problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 6 ICI
     '''
-    ((stateX, stateY), visited) = state
-    
-    unvisitedCorners = []
-    for i, isVisited in enumerate(visited):
-        if not isVisited:
-            unvisitedCorners.append(corners[i])
-
-    if len(unvisitedCorners) == 0:
-        return 0
-    
-    distances = []
-    for (cornerX, cornerY) in unvisitedCorners:
-       distances.append(abs(cornerX - stateX) + abs(cornerY - stateY))
-
-    return max(distances)
+    ((stateX, stateY), visitedFoods) = state
+    max = 0
+    for i, visitedFood in enumerate(visitedFoods):
+        if not visitedFood:
+            cost = abs(corners[i][0] - stateX) + abs(corners[i][1] - stateY)
+            if max < cost:
+                max = cost 
+    return max
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -508,7 +500,17 @@ def foodHeuristic(state, problem: FoodSearchProblem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 7 ICI
     '''
-
-
-    return 0
-
+    stateX, stateY = position
+    max = 0
+    
+    for x in range(foodGrid.width):
+        for y in range(foodGrid.height):
+           if foodGrid[x][y] == True:
+               cost = abs(x - stateX) + abs(y - stateY)
+               if max < cost:
+                    max = cost
+    
+    if max == 0:
+        return 0
+    
+    return max
