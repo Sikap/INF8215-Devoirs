@@ -1,3 +1,8 @@
+###
+# nom: Simon Kaplo           matricule: 1947701
+# nom: Bassem Michel Ghaly   matricule: 1951389
+###
+
 # searchAgents.py
 # ---------------
 # Licensing Information:  You are free to use or extend these projects for
