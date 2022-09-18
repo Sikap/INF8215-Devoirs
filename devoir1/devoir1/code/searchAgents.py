@@ -501,14 +501,12 @@ def foodHeuristic(state, problem: FoodSearchProblem):
         INSÉREZ VOTRE SOLUTION À LA QUESTION 7 ICI
     '''
     foodList = foodGrid.asList()
-    costList = []
+    max  = 0
     
     for food in foodList:
         searchProblem = PositionSearchProblem(problem.startingGameState, start = position, goal = food, warn = False, visualize = False)
         cost = len(search.bfs(searchProblem))
-        costList.append(cost)
+        if max < cost:
+            max = cost
     
-    if len(costList) == 0:
-        return 0
-    
-    return max(costList)
+    return max
