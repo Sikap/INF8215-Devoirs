@@ -509,8 +509,13 @@ def foodHeuristic(state, problem: FoodSearchProblem):
     max  = 0
     
     for food in foodList:
-        searchProblem = PositionSearchProblem(problem.startingGameState, start = position, goal = food, warn = False, visualize = False)
-        cost = len(search.bfs(searchProblem))
+        if (position,food) in problem.heuristicInfo:
+            cost = problem.heuristicInfo[(position,food)]
+        else:
+            searchProblem = PositionSearchProblem(problem.startingGameState, start = position, goal = food, warn = False, visualize = False)
+            cost = len(search.bfs(searchProblem))
+            problem.heuristicInfo.setdefault((position,food),cost)
+            
         if max < cost:
             max = cost
     
