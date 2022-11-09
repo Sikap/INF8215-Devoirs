@@ -21,6 +21,19 @@ array[1..h, 1..v] of var int: x;
 % Le coût total
 var int: tot_cost;
 
+% Nombre de maisons à construire plus grand que la demande horizentale.
+constraint forall(h_i in 1..h)(sum(v_i in 1..v)(x[h_i, v_i]) >= demand_per_h[h_i]);
+% Nombre de maisons à construire plus grand que la demande verticale. 
+constraint forall(v_i in 1..v)(sum(h_i in 1..h)(x[h_i, v_i]) >= demand_per_v[v_i]);
+% Nombre de maisons à construire dans un pâté inferieur a m. 
+constraint forall(h_i in 1..h, v_i in 1..v)(x[h_i, v_i] <= m);
+% Nombre de maisons à construire dans un pâté positif ou nulle. 
+constraint forall(h_i in 1..h, v_i in 1..v)(x[h_i, v_i] >= 0);
+% Cout totale de construction de tous les pâtés.
+constraint tot_cost = sum(h_i in 1..h, v_i in 1..v)(if x[h_i,v_i]>0 then x[h_i, v_i]*cost_per_house[h_i, v_i] + cost_per_permit[h_i, v_i] else 0 endif);
+
+solve minimize tot_cost;
+
 output
   
   ["Configuration : \n"]  
