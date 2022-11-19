@@ -1,3 +1,8 @@
+%%%
+% nom: Simon Kaplo           matricule: 1947701
+% nom: Bassem Michel Ghaly   matricule: 1951389
+%%%
+
 include "globals.mzn";
 
 enum ATTRACTION;
