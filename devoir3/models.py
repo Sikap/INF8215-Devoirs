@@ -46,12 +46,15 @@ class PerceptronModel(object):
         Train the perceptron until convergence.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 1 ***"
+        # Itére sur le dataSet jusqu'a qu'il n'est aucune erreur de prédiction.
         while True: 
             classificationErreur = False
             for x, y in dataset.iterate_once(1) :
+                # Si erreur de predictrion on update le poid W.
                 if self.get_prediction(x) != nn.as_scalar(y):
                     self.w.update(x,nn.as_scalar(y))
                     classificationErreur = True 
+            # Si aucune erreur de predictrion dans le dataSet est trouver on arrete l'entrainement.
             if not classificationErreur:
                 break
 
@@ -83,7 +86,7 @@ class RegressionModel(object):
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
         y = x
         for layer in self.hiddenLayers:        
-            #y = W2*ReLU(W1*X+b1)+b2
+            # Un réseau de neurones à deux couches y = W2*ReLU(W1*X+b1)+b2
             y = nn.AddBias(nn.Linear(nn.ReLU(nn.AddBias(nn.Linear(y, layer[0]), layer[1])), layer[2]), layer[3])
         return y
     
@@ -105,7 +108,9 @@ class RegressionModel(object):
         Trains the model.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
+        # Sous-ensemble d'entrainement qui correspond a 10% des données. 
         self.miniBatchSize = int(0.1*dataset.x.shape[0])
+        # Verifie que la taille totale du jeu de données soit divisible par la taille du mini-batch.
         while len(dataset.x) % self.miniBatchSize != 0:
             self.miniBatchSize += 1
         self.hiddenLayers = [
@@ -115,21 +120,25 @@ class RegressionModel(object):
                 nn.Parameter(self.layerDimensions[i], dataset.x.shape[1]),
                 nn.Parameter(1,1)
             ])
-            for i in range(2)
+            for i in range(self.numberOfLayers)
         ]
+        # Itére sur le dataSet jusqu'a que la moyen des erreur quadratique est inferieur ou egale a 0.02.
         while True:
             losses = []
             for x, y in dataset.iterate_once(self.miniBatchSize):
                 loss = self.get_loss(x,y)
-                params = []
+                # Construit une lists des paramètres.
+                parameterList = []
                 for layer in self.hiddenLayers:
-                    for param in layer:
-                        params.append(param)
-                gradients = nn.gradients(loss, params)
-                for i in range(len(params)):
-                    param = params[i]
+                    for parameter in layer:
+                        parameterList.append(parameter)
+                # Calcule le gradient de chaque paramètre et mes a jour le réseau.
+                gradients = nn.gradients(loss, parameterList)
+                for i in range(len(parameterList)):
+                    param = parameterList[i]
                     param.update(gradients[i], -self.learningRate)
                 losses.append(nn.as_scalar(loss))
+            # Si la moyen des erreur quadratique est inferieur ou egale a 0.02 on arrete l'entrainement.
             if numpy.mean(losses) <= 0.02:
                 break
 
@@ -185,7 +194,7 @@ class DigitClassificationModel(object):
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
         y = x
         for layer in self.hiddenLayers:
-            #y = W2*ReLU(W1*X+b1)+b2
+            # Un réseau de neurones à deux couches y = W2*ReLU(W1*X+b1)+b2
             y = nn.AddBias(nn.Linear(nn.ReLU(nn.AddBias(nn.Linear(y, layer[0]), layer[1])), layer[2]), layer[3])
         return y
     
@@ -210,19 +219,25 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
+        # Sous-ensemble d'entrainement qui correspond a 0.5% des données.
         self.batch_size = int(0.005 * dataset.x.shape[0])
+        # Verifie que la taille totale du jeu de données soit divisible par la taille du mini-batch.
         while len(dataset.x) % self.batch_size != 0:
             self.batch_size += 1
+        # Itére sur le dataSet jusqu'a atteindre une précision d’au moins 97%.
         while True:
             for x, y in dataset.iterate_once(self.batch_size):
                 loss = self.get_loss(x,y)
-                params = []
+                # Construit une lists des paramètres.
+                parameterList = []
                 for layer in self.hiddenLayers:
-                    for param in layer:
-                        params.append(param)
-                gradients = nn.gradients(loss, params)
-                for i in range(len(params)):
-                    param = params[i]
-                    param.update(gradients[i], -self.learningRate)
+                    for parameter in layer:
+                        parameterList.append(parameter)
+                # Calcule le gradient de chaque paramètre et mes a jour le réseau.
+                gradients = nn.gradients(loss, parameterList)
+                for i in range(len(parameterList)):
+                    parameter = parameterList[i]
+                    parameter.update(gradients[i], -self.learningRate)
+            # Si on attiend une précision d’au moins 97% on arrete l'entrainement.
             if dataset.get_validation_accuracy() > 0.97:
                 break
