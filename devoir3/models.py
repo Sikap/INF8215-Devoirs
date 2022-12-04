@@ -46,7 +46,6 @@ class PerceptronModel(object):
         Train the perceptron until convergence.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 1 ***"
-       
         while True: 
             classificationErreur = False
             for x, y in dataset.iterate_once(1) :
@@ -186,7 +185,7 @@ class DigitClassificationModel(object):
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
         y = x
         for layer in self.hiddenLayers:
-           #y = W2*ReLU(W1*X+b1)+b2
+            #y = W2*ReLU(W1*X+b1)+b2
             y = nn.AddBias(nn.Linear(nn.ReLU(nn.AddBias(nn.Linear(y, layer[0]), layer[1])), layer[2]), layer[3])
         return y
     
@@ -216,7 +215,6 @@ class DigitClassificationModel(object):
             self.batch_size += 1
         while True:
             for x, y in dataset.iterate_once(self.batch_size):
-
                 loss = self.get_loss(x,y)
                 params = []
                 for layer in self.hiddenLayers:
