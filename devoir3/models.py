@@ -1,3 +1,8 @@
+###
+# nom: Simon Kaplo           matricule: 1947701
+# nom: Bassem Michel Ghaly   matricule: 1951389
+###
+
 import nn
 import numpy
 
@@ -239,5 +244,5 @@ class DigitClassificationModel(object):
                     parameter = parameterList[i]
                     parameter.update(gradients[i], -self.learningRate)
             # Si on attiend une précision d’au moins 97% on arrete l'entrainement.
-            if dataset.get_validation_accuracy() > 0.97:
+            if dataset.get_validation_accuracy() > 0.972:
                 break
